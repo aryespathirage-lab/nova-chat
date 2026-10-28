@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="NOVA Chat — prototype de messagerie communautaire.">
+<link rel="manifest" href="manifest.webmanifest">
+<title>NOVA Chat</title>
+<style>
+:root{--bg:#f5f5f7;--panel:#fff;--text:#1d1d1f;--muted:#777780;--line:#e6e6eb;--accent:#1769e0;--soft:#eaf2ff;--danger:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:1100px;margin:auto;padding:18px;min-height:100dvh}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 20px}.brand{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:750;letter-spacing:-.05em}.logo{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;color:white;background:linear-gradient(145deg,#82b7ff,#1769e0)}
+.pill{font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:7px 10px;border-radius:999px}
+.layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.sidebar{padding:16px}.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;margin:5px 8px 10px}
+.room{width:100%;border:0;background:transparent;text-align:left;padding:11px 10px;border-radius:12px;display:flex;align-items:center;gap:10px;color:var(--text);margin:3px 0}.room.active{background:var(--soft);color:var(--accent)}.room .hash{font-size:18px;color:var(--muted);width:20px}.room small{display:block;color:var(--muted);font-size:11px}.sidebar .secondary{width:100%;margin-top:14px}
+.main{display:flex;flex-direction:column;min-height:70vh}.room-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.room-head h1{font-size:19px;letter-spacing:-.04em;margin:0 0 3px}.room-head p{margin:0;color:var(--muted);font-size:12px}.messages{padding:20px;flex:1;display:flex;flex-direction:column;gap:15px;min-height:330px;max-height:55vh;overflow:auto}.message{display:flex;gap:10px;align-items:flex-start}.avatar{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#e9e8ff;color:#6253b8;font-weight:700;flex:none}.message:nth-child(2n) .avatar{background:#e2f5eb;color:#21744a}.msg-body{min-width:0}.msg-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.msg-top strong{font-size:13px}.msg-top time{font-size:11px;color:var(--muted)}.msg-text{margin-top:3px;overflow-wrap:anywhere}.msg-tools{margin-top:5px;display:flex;gap:10px}.link-btn{border:0;padding:0;background:transparent;color:var(--muted);font-size:11px;text-decoration:underline}.composer{border-top:1px solid var(--line);padding:15px;display:flex;gap:9px;align-items:flex-end}.composer textarea{resize:vertical;min-height:44px;max-height:120px;flex:1;min-width:0;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:var(--bg);color:var(--text);outline:none}.primary,.secondary{border-radius:12px;padding:10px 14px;border:1px solid var(--line);font-weight:650}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.secondary{background:var(--panel);color:var(--text)}.notice{margin:14px 0 0;color:var(--muted);font-size:11px;text-align:center}.hidden{display:none!important}.modal-backdrop{position:fixed;inset:0;background:#11182766;display:grid;place-items:center;padding:18px;z-index:5}.modal{background:var(--panel);color:var(--text);border-radius:18px;padding:22px;width:min(440px,100%);box-shadow:0 20px 70px #0002}.modal h2{margin:0 0 8px;font-size:21px}.modal p{color:var(--muted);font-size:13px}.modal label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px}.modal input,.modal textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:11px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.admin-list{display:grid;gap:10px;margin-top:14px}.report{padding:12px;border:1px solid var(--line);border-radius:12px}.report strong{font-size:13px}.report p{margin:5px 0}.foot{padding:16px 2px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:12px}
+@media(max-width:700px){.app{padding:12px}.layout{grid-template-columns:1fr}.sidebar{padding:10px;display:flex;gap:5px;overflow:auto}.sidebar .section-label,.sidebar .secondary{display:none}.room{width:auto;min-width:max-content;margin:0}.room small{display:none}.main{min-height:65vh}.messages{max-height:none;min-height:42vh;padding:15px}.room-head{padding:15px}.composer{padding:10px}.composer .primary{padding:11px}.foot{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><span class="logo">N</span><span id="brandName">NOVA Chat</span></div><div style="display:flex;gap:8px;align-items:center"><span class="pill">Prototype v0.1</span><button class="secondary" id="adminOpen">Modération</button></div></header>
+<div class="layout">
+<aside class="panel sidebar">
+<div class="section-label">Espaces</div>
+<button class="room active" data-room="general"><span class="hash">#</span><span>général<small>Salon public</small></span></button>
+<button class="room" data-room="projets"><span class="hash">#</span><span>projets<small>Salon public</small></span></button>
+<button class="room" data-room="equipe"><span class="hash">▣</span><span>équipe<small>Salon privé · démo</small></span></button>
+<button class="secondary" id="newRoom">＋ Créer un salon</button>
+</aside>
+<main class="panel main">
+<div class="room-head"><div><h1 id="roomTitle"># général</h1><p id="roomDesc">Salon public · Messages de démonstration</p></div><button class="secondary" id="reportOpen">Signaler</button></div>
+<div class="messages" id="messages" aria-live="polite"></div>
+<form class="composer" id="composer"><textarea id="messageInput" maxlength="1200" placeholder="Écrire un message…" aria-label="Écrire un message" required></textarea><button class="primary" type="submit">Envoyer</button></form>
+</main>
+</div>
+<p class="notice">Prototype local uniquement : aucun compte réel, aucun serveur et aucun message transmis.</p>
+<footer class="foot"><span>© 2026 NOVA Chat</span><span>Les messages de démonstration sont visibles dans cette page uniquement.</span></footer>
+</div>
+<div id="modalRoot"></div>
+<script>
+(() => {
+ const initial={
+  general:[
+   {id:1,user:"NOVA",initial:"N",time:"09:41",text:"Bienvenue dans NOVA Chat. Ceci est un prototype interactif.",demo:true},
+   {id:2,user:"Alex",initial:"A",time:"09:42",text:"L’interface est volontairement simple et lisible.",demo:true},
+   {id:3,user:"Mina",initial:"M",time:"09:43",text:"La prochaine étape sera de connecter de vrais comptes et messages.",demo:true}
+  ],
+  projets:[{id:4,user:"NOVA",initial:"N",time:"10:05",text:"Salon de démonstration pour parler des projets.",demo:true}],
+  equipe:[{id:5,user:"NOVA",initial:"N",time:"10:08",text:"Salon privé fictif. L’accès privé sera réellement contrôlé par le serveur dans la version connectée.",demo:true}]
+ };
+ let rooms={general:{title:"général",private:false},projets:{title:"projets",private:false},equipe:{title:"équipe",private:true}};
+ let data=JSON.parse(JSON.stringify(initial)), current="general", nextId=6, reports=[];
+ const $=id=>document.getElementById(id);
+ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function modal(title,desc,fields,submitLabel,onSubmit){$("modalRoot").innerHTML=`<div class="modal-backdrop" id="backdrop"><form class="modal" id="modalForm"><h2>${esc(title)}</h2><p>${esc(desc)}</p>${fields}<div class="modal-actions"><button class="secondary" type="button" id="cancelModal">Annuler</button><button class="primary" type="submit">${esc(submitLabel)}</button></div></form></div>`;$("cancelModal").onclick=closeModal;$("backdrop").onclick=e=>{if(e.target.id==="backdrop")closeModal()};$("modalForm").onsubmit=e=>{e.preventDefault();onSubmit(new FormData(e.currentTarget));};}
+ function closeModal(){$("modalRoot").innerHTML=""}
+ function renderRooms(){document.querySelectorAll("[data-room]").forEach(b=>b.classList.toggle("active",b.dataset.room===current))}
+ function renderMessages(){const m=$("messages");m.innerHTML=(data[current]||[]).map(x=>`<article class="message"><div class="avatar">${esc(x.initial)}</div><div class="msg-body"><div class="msg-top"><strong>${esc(x.user)}</strong><time>${esc(x.time)}</time></div><div class="msg-text">${esc(x.text)}</div><div class="msg-tools"><button class="link-btn" data-report="${x.id}">Signaler ce message</button></div></div></article>`).join("")||'<p style="color:var(--muted);text-align:center">Aucun message dans ce salon.</p>';m.scrollTop=m.scrollHeight;}
+ function switchRoom(id){if(!rooms[id])return;current=id;renderRooms();$("roomTitle").textContent=(rooms[id].private?"▣ ":"# ")+rooms[id].title;$("roomDesc").textContent=(rooms[id].private?"Salon privé":"Salon public")+" · Prototype local";renderMessages()}
+ document.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>switchRoom(b.dataset.room));
+ $("composer").onsubmit=e=>{e.preventDefault();const text=$("messageInput").value.trim();if(!text)return;const now=new Date();data[current].push({id:nextId++,user:"Toi (démo)",initial:"T",time:now.toLocaleTimeString("fr-CH",{hour:"2-digit",minute:"2-digit"}),text});$("messageInput").value="";renderMessages()};
+ $("newRoom").onclick=()=>modal("Créer un salon","Création locale de démonstration.",'<label for="roomName">Nom du salon</label><input id="roomName" name="name" maxlength="30" required><label><input type="checkbox" name="private" style="width:auto"> Salon privé (démo)</label>',"Créer",f=>{const name=String(f.get("name")||"").trim().replace(/^#+/,"");if(!name)return;const id="r"+Date.now();rooms[id]={title:name,private:f.get("private")==="on"};data[id]=[];const b=document.createElement("button");b.className="room";b.dataset.room=id;b.innerHTML=`<span class="hash">${rooms[id].private?"▣":"#"}</span><span>${esc(name)}<small>${rooms[id].private?"Salon privé · démo":"Salon public"}</small></span>`;b.onclick=()=>switchRoom(id);$("newRoom").before(b);closeModal();switchRoom(id)});
+ function addReport(messageId,reason){reports.unshift({id:reports.length+1,room:rooms[current].title,messageId,reason,status:"À examiner"});closeModal();alert("Signalement ajouté à la file de démonstration.");}
+ function reportMessage(id){const msg=(data[current]||[]).find(m=>m.id===id);if(!msg)return;modal("Signaler un message","Le signalement sera ajouté à la console de démonstration.",'<label for="reason">Motif</label><textarea id="reason" name="reason" maxlength="300" required placeholder="Expliquez brièvement le problème"></textarea>',"Envoyer",f=>addReport(id,String(f.get("reason")||"").trim()))}
+ $("reportOpen").onclick=()=>modal("Signaler le salon","Décrivez le problème rencontré.",'<label for="reason">Motif du signalement</label><textarea id="reason" name="reason" maxlength="300" required></textarea>',"Signaler",f=>{reports.unshift({id:reports.length+1,room:rooms[current].title,messageId:null,reason:String(f.get("reason")||"").trim(),status:"À examiner"});closeModal();alert("Signalement ajouté à la file de démonstration.")});
+ $("messages").addEventListener("click",e=>{const b=e.target.closest("[data-report]");if(b)reportMessage(Number(b.dataset.report))});
+ $("adminOpen").onclick=()=>{const items=reports.map(r=>`<div class="report"><strong>Signalement #${r.id} · ${esc(r.room)}</strong><p>${esc(r.reason)}</p><p>Statut : ${esc(r.status)}</p><button class="secondary" data-resolve="${r.id}">Marquer comme examiné</button></div>`).join("");modal("Console de modération","Mode démonstration. Cette console ne donne accès à aucun message d’un autre utilisateur.",`<p><strong>${reports.length}</strong> signalement(s) en mémoire dans cette session.</p><div class="admin-list">${items||'<p>Aucun signalement pour le moment.</p>'}</div><p>Dans la version réelle, l’accès sera réservé aux rôles autorisés et chaque action sera inscrite dans un journal d’audit.</p>`,"Fermer",()=>closeModal());document.querySelectorAll("[data-resolve]").forEach(b=>b.onclick=()=>{const r=reports.find(x=>x.id===Number(b.dataset.resolve));if(r)r.status="Examiné";closeModal();$("adminOpen").click()})};
+ renderRooms();renderMessages();
+ if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
