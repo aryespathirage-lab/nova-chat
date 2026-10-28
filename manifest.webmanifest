@@ -1,0 +1,10 @@
+{
+  "name": "NOVA Chat",
+  "short_name": "NOVA Chat",
+  "description": "Prototype de messagerie communautaire",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
+  "icons": []
+}
